@@ -1,14 +1,351 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import Icon from '@/components/ui/icon';
 
-const Index = () => {
+interface Course {
+  id: number;
+  title: string;
+  description: string;
+  duration: string;
+  level: string;
+  progress: number;
+  rating: number;
+  students: number;
+  category: string;
+}
+
+const courses: Course[] = [
+  {
+    id: 1,
+    title: 'Основы веб-разработки',
+    description: 'Изучите HTML, CSS и JavaScript с нуля',
+    duration: '8 недель',
+    level: 'Начальный',
+    progress: 65,
+    rating: 4.8,
+    students: 2543,
+    category: 'Программирование'
+  },
+  {
+    id: 2,
+    title: 'React и современный фронтенд',
+    description: 'Создавайте интерактивные веб-приложения',
+    duration: '10 недель',
+    level: 'Средний',
+    progress: 35,
+    rating: 4.9,
+    students: 1876,
+    category: 'Программирование'
+  },
+  {
+    id: 3,
+    title: 'UX/UI дизайн с нуля',
+    description: 'Научитесь создавать красивые интерфейсы',
+    duration: '6 недель',
+    level: 'Начальный',
+    progress: 0,
+    rating: 4.7,
+    students: 3201,
+    category: 'Дизайн'
+  },
+  {
+    id: 4,
+    title: 'Python для анализа данных',
+    description: 'Работа с данными и машинное обучение',
+    duration: '12 недель',
+    level: 'Средний',
+    progress: 0,
+    rating: 4.9,
+    students: 1432,
+    category: 'Data Science'
+  },
+  {
+    id: 5,
+    title: 'Digital маркетинг 2024',
+    description: 'Современные инструменты продвижения',
+    duration: '5 недель',
+    level: 'Начальный',
+    progress: 0,
+    rating: 4.6,
+    students: 2890,
+    category: 'Маркетинг'
+  },
+  {
+    id: 6,
+    title: 'Backend разработка на Node.js',
+    description: 'Создавайте серверные приложения',
+    duration: '9 недель',
+    level: 'Продвинутый',
+    progress: 0,
+    rating: 4.8,
+    students: 1654,
+    category: 'Программирование'
+  }
+];
+
+const stats = [
+  { label: 'Пройдено курсов', value: '12', icon: 'GraduationCap', color: 'text-primary' },
+  { label: 'Часов обучения', value: '156', icon: 'Clock', color: 'text-secondary' },
+  { label: 'Сертификатов', value: '8', icon: 'Award', color: 'text-accent' },
+  { label: 'Средний балл', value: '4.7', icon: 'Star', color: 'text-amber-500' }
+];
+
+export default function Index() {
+  const [selectedCategory, setSelectedCategory] = useState('Все');
+
+  const categories = ['Все', 'Программирование', 'Дизайн', 'Data Science', 'Маркетинг'];
+
+  const filteredCourses = selectedCategory === 'Все' 
+    ? courses 
+    : courses.filter(course => course.category === selectedCategory);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10"></div>
+        
+        <div className="container mx-auto px-4 py-16 relative z-10">
+          <div className="text-center mb-16 animate-fade-in">
+            <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              Учись по-новому
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Современная платформа для онлайн-образования с интерактивными курсами и личным кабинетом
+            </p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Button size="lg" className="text-lg px-8 py-6 hover:scale-105 transition-transform">
+                <Icon name="Rocket" size={24} className="mr-2" />
+                Начать обучение
+              </Button>
+              <Button size="lg" variant="outline" className="text-lg px-8 py-6 hover:scale-105 transition-transform">
+                <Icon name="PlayCircle" size={24} className="mr-2" />
+                Смотреть демо
+              </Button>
+            </div>
+          </div>
+
+          <Tabs defaultValue="courses" className="mb-16">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
+              <TabsTrigger value="courses" className="text-lg">
+                <Icon name="BookOpen" size={20} className="mr-2" />
+                Курсы
+              </TabsTrigger>
+              <TabsTrigger value="dashboard" className="text-lg">
+                <Icon name="LayoutDashboard" size={20} className="mr-2" />
+                Панель
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="courses" className="animate-fade-in">
+              <div className="mb-8 flex gap-2 flex-wrap justify-center">
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? 'default' : 'outline'}
+                    onClick={() => setSelectedCategory(category)}
+                    className="hover:scale-105 transition-transform"
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredCourses.map((course, index) => (
+                  <Card 
+                    key={course.id} 
+                    className="hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-scale-in border-2 hover:border-primary/50"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <CardHeader>
+                      <div className="flex justify-between items-start mb-2">
+                        <Badge variant={course.progress > 0 ? 'default' : 'secondary'}>
+                          {course.level}
+                        </Badge>
+                        <div className="flex items-center gap-1 text-amber-500">
+                          <Icon name="Star" size={16} />
+                          <span className="font-semibold">{course.rating}</span>
+                        </div>
+                      </div>
+                      <CardTitle className="text-2xl mb-2">{course.title}</CardTitle>
+                      <CardDescription className="text-base">{course.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {course.progress > 0 && (
+                        <div className="mb-4">
+                          <div className="flex justify-between text-sm mb-2">
+                            <span className="text-muted-foreground">Прогресс</span>
+                            <span className="font-semibold text-primary">{course.progress}%</span>
+                          </div>
+                          <Progress value={course.progress} className="h-2" />
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center text-sm text-muted-foreground mb-4">
+                        <div className="flex items-center gap-1">
+                          <Icon name="Clock" size={16} />
+                          <span>{course.duration}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Icon name="Users" size={16} />
+                          <span>{course.students.toLocaleString()}</span>
+                        </div>
+                      </div>
+                      <Button className="w-full hover:scale-105 transition-transform" size="lg">
+                        {course.progress > 0 ? (
+                          <>
+                            <Icon name="PlayCircle" size={20} className="mr-2" />
+                            Продолжить
+                          </>
+                        ) : (
+                          <>
+                            <Icon name="Rocket" size={20} className="mr-2" />
+                            Начать курс
+                          </>
+                        )}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="dashboard" className="animate-fade-in">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                {stats.map((stat, index) => (
+                  <Card 
+                    key={stat.label} 
+                    className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-scale-in"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <Icon name={stat.icon} size={32} className={stat.color} />
+                        <span className="text-4xl font-bold">{stat.value}</span>
+                      </div>
+                      <p className="text-muted-foreground text-sm">{stat.label}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-6">
+                <Card className="animate-slide-up">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Icon name="TrendingUp" size={24} className="text-primary" />
+                      Активность обучения
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      {['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'].map((day, index) => {
+                        const value = Math.random() * 100;
+                        return (
+                          <div key={day}>
+                            <div className="flex justify-between text-sm mb-2">
+                              <span className="text-muted-foreground">{day}</span>
+                              <span className="font-semibold">{Math.round(value)}%</span>
+                            </div>
+                            <Progress value={value} className="h-3" />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Icon name="Target" size={24} className="text-secondary" />
+                      Текущие цели
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <Icon name="CheckCircle2" size={20} className="text-primary" />
+                            <span className="font-semibold">Завершить 3 курса</span>
+                          </div>
+                          <span className="text-sm text-muted-foreground">2/3</span>
+                        </div>
+                        <Progress value={66} className="h-2" />
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <Icon name="Award" size={20} className="text-accent" />
+                            <span className="font-semibold">Получить 5 сертификатов</span>
+                          </div>
+                          <span className="text-sm text-muted-foreground">3/5</span>
+                        </div>
+                        <Progress value={60} className="h-2" />
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <Icon name="Flame" size={20} className="text-orange-500" />
+                            <span className="font-semibold">Учиться 30 дней подряд</span>
+                          </div>
+                          <span className="text-sm text-muted-foreground">18/30</span>
+                        </div>
+                        <Progress value={60} className="h-2" />
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <Icon name="BookOpen" size={20} className="text-secondary" />
+                            <span className="font-semibold">Пройти 100 уроков</span>
+                          </div>
+                          <span className="text-sm text-muted-foreground">78/100</span>
+                        </div>
+                        <Progress value={78} className="h-2" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card className="mt-6 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Icon name="Trophy" size={24} className="text-amber-500" />
+                    Достижения
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {[
+                      { icon: 'Medal', label: 'Первый курс', color: 'text-amber-500' },
+                      { icon: 'Zap', label: 'Быстрый старт', color: 'text-primary' },
+                      { icon: 'Flame', label: 'Неделя обучения', color: 'text-orange-500' },
+                      { icon: 'Star', label: 'Отличник', color: 'text-secondary' },
+                      { icon: 'Heart', label: 'Активный ученик', color: 'text-rose-500' },
+                      { icon: 'Brain', label: 'Знаток', color: 'text-accent' },
+                      { icon: 'Sparkles', label: 'Перфекционист', color: 'text-purple-500' },
+                      { icon: 'Crown', label: 'Мастер', color: 'text-amber-600' }
+                    ].map((achievement) => (
+                      <div 
+                        key={achievement.label}
+                        className="flex flex-col items-center p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors hover:scale-105 transform duration-200"
+                      >
+                        <Icon name={achievement.icon} size={32} className={achievement.color} />
+                        <span className="text-xs text-center mt-2 font-medium">{achievement.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );
-};
-
-export default Index;
+}
