@@ -87,7 +87,27 @@ const courses: Course[] = [
     progress: 35,
     rating: 4.9,
     students: 1876,
-    category: 'Программирование'
+    category: 'Программирование',
+    modules: [
+      {
+        id: 1,
+        title: 'Введение в React',
+        lessons: [
+          { id: 1, title: 'Что такое React?', duration: '10 мин', type: 'video', completed: false },
+          { id: 2, title: 'Создание первого компонента', duration: '18 мин', type: 'video', completed: false },
+          { id: 3, title: 'JSX синтаксис', duration: '15 мин', type: 'video', completed: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Hooks и состояние',
+        lessons: [
+          { id: 4, title: 'useState хук', duration: '20 мин', type: 'video', completed: false },
+          { id: 5, title: 'useEffect и жизненный цикл', duration: '25 мин', type: 'video', completed: false },
+          { id: 6, title: 'Практика: Счетчик', duration: '30 мин', type: 'text', completed: false }
+        ]
+      }
+    ]
   },
   {
     id: 3,
@@ -98,7 +118,27 @@ const courses: Course[] = [
     progress: 0,
     rating: 4.7,
     students: 3201,
-    category: 'Дизайн'
+    category: 'Дизайн',
+    modules: [
+      {
+        id: 1,
+        title: 'Основы UX дизайна',
+        lessons: [
+          { id: 1, title: 'Принципы user experience', duration: '12 мин', type: 'video', completed: false },
+          { id: 2, title: 'Исследование пользователей', duration: '16 мин', type: 'video', completed: false },
+          { id: 3, title: 'Персоны и сценарии', duration: '14 мин', type: 'text', completed: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'UI и визуальный дизайн',
+        lessons: [
+          { id: 4, title: 'Типографика', duration: '18 мин', type: 'video', completed: false },
+          { id: 5, title: 'Цветовая теория', duration: '20 мин', type: 'video', completed: false },
+          { id: 6, title: 'Композиция и сетки', duration: '22 мин', type: 'video', completed: false }
+        ]
+      }
+    ]
   },
   {
     id: 4,
@@ -109,7 +149,27 @@ const courses: Course[] = [
     progress: 0,
     rating: 4.9,
     students: 1432,
-    category: 'Data Science'
+    category: 'Data Science',
+    modules: [
+      {
+        id: 1,
+        title: 'Основы Python',
+        lessons: [
+          { id: 1, title: 'Синтаксис Python', duration: '15 мин', type: 'video', completed: false },
+          { id: 2, title: 'Типы данных и коллекции', duration: '20 мин', type: 'video', completed: false },
+          { id: 3, title: 'Функции и модули', duration: '18 мин', type: 'video', completed: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Pandas и NumPy',
+        lessons: [
+          { id: 4, title: 'Работа с DataFrame', duration: '25 мин', type: 'video', completed: false },
+          { id: 5, title: 'Анализ и визуализация', duration: '30 мин', type: 'video', completed: false },
+          { id: 6, title: 'Практический проект', duration: '45 мин', type: 'text', completed: false }
+        ]
+      }
+    ]
   },
   {
     id: 5,
@@ -120,7 +180,27 @@ const courses: Course[] = [
     progress: 0,
     rating: 4.6,
     students: 2890,
-    category: 'Маркетинг'
+    category: 'Маркетинг',
+    modules: [
+      {
+        id: 1,
+        title: 'Основы digital маркетинга',
+        lessons: [
+          { id: 1, title: 'Что такое digital маркетинг?', duration: '10 мин', type: 'video', completed: false },
+          { id: 2, title: 'Каналы продвижения', duration: '15 мин', type: 'video', completed: false },
+          { id: 3, title: 'Целевая аудитория', duration: '12 мин', type: 'video', completed: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'SMM и контент-маркетинг',
+        lessons: [
+          { id: 4, title: 'Стратегия в соцсетях', duration: '20 мин', type: 'video', completed: false },
+          { id: 5, title: 'Создание контент-плана', duration: '18 мин', type: 'text', completed: false },
+          { id: 6, title: 'Аналитика и метрики', duration: '16 мин', type: 'video', completed: false }
+        ]
+      }
+    ]
   },
   {
     id: 6,
@@ -131,7 +211,27 @@ const courses: Course[] = [
     progress: 0,
     rating: 4.8,
     students: 1654,
-    category: 'Программирование'
+    category: 'Программирование',
+    modules: [
+      {
+        id: 1,
+        title: 'Node.js основы',
+        lessons: [
+          { id: 1, title: 'Введение в Node.js', duration: '14 мин', type: 'video', completed: false },
+          { id: 2, title: 'NPM и модули', duration: '16 мин', type: 'video', completed: false },
+          { id: 3, title: 'Асинхронность и промисы', duration: '22 мин', type: 'video', completed: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Express и REST API',
+        lessons: [
+          { id: 4, title: 'Создание сервера на Express', duration: '20 мин', type: 'video', completed: false },
+          { id: 5, title: 'Роутинг и middleware', duration: '25 мин', type: 'video', completed: false },
+          { id: 6, title: 'Работа с базами данных', duration: '30 мин', type: 'video', completed: false }
+        ]
+      }
+    ]
   }
 ];
 
