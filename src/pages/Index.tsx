@@ -246,6 +246,7 @@ export default function Index() {
   const [selectedCategory, setSelectedCategory] = useState('Все');
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const categories = ['Все', 'Программирование', 'Дизайн', 'Data Science', 'Маркетинг'];
 
@@ -271,7 +272,7 @@ export default function Index() {
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Современная платформа для онлайн-образования с интерактивными курсами и личным кабинетом
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
+<div className="flex gap-4 justify-center items-center flex-wrap">
               <Button size="lg" className="text-lg px-8 py-6 hover:scale-105 transition-transform">
                 <Icon name="Rocket" size={24} className="mr-2" />
                 Начать обучение
@@ -280,23 +281,20 @@ export default function Index() {
                 <Icon name="PlayCircle" size={24} className="mr-2" />
                 Смотреть демо
               </Button>
+              <Button 
+                size="lg" 
+                variant="secondary" 
+                className="text-lg px-8 py-6 hover:scale-105 transition-transform"
+                onClick={() => setShowProfile(true)}
+              >
+                <Icon name="User" size={24} className="mr-2" />
+                Мой профиль
+              </Button>
             </div>
           </div>
 
-          <Tabs defaultValue="courses" className="mb-16">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-12">
-              <TabsTrigger value="courses" className="text-lg">
-                <Icon name="BookOpen" size={20} className="mr-2" />
-                Курсы
-              </TabsTrigger>
-              <TabsTrigger value="dashboard" className="text-lg">
-                <Icon name="LayoutDashboard" size={20} className="mr-2" />
-                Панель
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="courses" className="animate-fade-in">
-              <div className="mb-8 flex gap-2 flex-wrap justify-center">
+<div className="mb-16">
+<div className="mb-8 flex gap-2 flex-wrap justify-center">
                 {categories.map((category) => (
                   <Button
                     key={category}
@@ -307,9 +305,9 @@ export default function Index() {
                     {category}
                   </Button>
                 ))}
-              </div>
+</div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCourses.map((course, index) => (
                   <Card 
                     key={course.id} 
@@ -370,10 +368,25 @@ export default function Index() {
                   </Card>
                 ))}
               </div>
-            </TabsContent>
+          </div>
+        </div>
+      </div>
 
-            <TabsContent value="dashboard" className="animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <Dialog open={showProfile} onOpenChange={setShowProfile}>
+        <DialogContent className="max-w-6xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-3">
+              <Icon name="User" size={32} className="text-primary" />
+              Мой профиль
+            </DialogTitle>
+            <DialogDescription className="text-base">
+              Ваша статистика обучения и достижения
+            </DialogDescription>
+          </DialogHeader>
+          
+          <ScrollArea className="h-[70vh] pr-4">
+            <div className="space-y-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((stat, index) => (
                   <Card 
                     key={stat.label} 
@@ -501,10 +514,10 @@ export default function Index() {
                   </div>
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
+            </div>
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[85vh]">
