@@ -4,6 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
 interface Course {
@@ -16,6 +19,21 @@ interface Course {
   rating: number;
   students: number;
   category: string;
+  modules?: Module[];
+}
+
+interface Module {
+  id: number;
+  title: string;
+  lessons: Lesson[];
+}
+
+interface Lesson {
+  id: number;
+  title: string;
+  duration: string;
+  type: 'video' | 'text' | 'quiz';
+  completed: boolean;
 }
 
 const courses: Course[] = [
@@ -28,7 +46,37 @@ const courses: Course[] = [
     progress: 65,
     rating: 4.8,
     students: 2543,
-    category: 'Программирование'
+    category: 'Программирование',
+    modules: [
+      {
+        id: 1,
+        title: 'Введение в HTML',
+        lessons: [
+          { id: 1, title: 'Что такое HTML?', duration: '12 мин', type: 'video', completed: true },
+          { id: 2, title: 'Структура HTML документа', duration: '15 мин', type: 'video', completed: true },
+          { id: 3, title: 'Теги и атрибуты', duration: '20 мин', type: 'video', completed: false },
+          { id: 4, title: 'Тест по HTML', duration: '10 мин', type: 'quiz', completed: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Основы CSS',
+        lessons: [
+          { id: 5, title: 'Введение в CSS', duration: '14 мин', type: 'video', completed: false },
+          { id: 6, title: 'Селекторы и свойства', duration: '18 мин', type: 'video', completed: false },
+          { id: 7, title: 'Flexbox и Grid', duration: '25 мин', type: 'video', completed: false }
+        ]
+      },
+      {
+        id: 3,
+        title: 'JavaScript для начинающих',
+        lessons: [
+          { id: 8, title: 'Переменные и типы данных', duration: '16 мин', type: 'video', completed: false },
+          { id: 9, title: 'Функции', duration: '22 мин', type: 'video', completed: false },
+          { id: 10, title: 'Итоговый тест', duration: '15 мин', type: 'quiz', completed: false }
+        ]
+      }
+    ]
   },
   {
     id: 2,
@@ -96,8 +144,15 @@ const stats = [
 
 export default function Index() {
   const [selectedCategory, setSelectedCategory] = useState('Все');
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const categories = ['Все', 'Программирование', 'Дизайн', 'Data Science', 'Маркетинг'];
+
+  const handleCourseClick = (course: Course) => {
+    setSelectedCourse(course);
+    setIsDialogOpen(true);
+  };
 
   const filteredCourses = selectedCategory === 'Все' 
     ? courses 
@@ -194,7 +249,11 @@ export default function Index() {
                           <span>{course.students.toLocaleString()}</span>
                         </div>
                       </div>
-                      <Button className="w-full hover:scale-105 transition-transform" size="lg">
+                      <Button 
+                        className="w-full hover:scale-105 transition-transform" 
+                        size="lg"
+                        onClick={() => handleCourseClick(course)}
+                      >
                         {course.progress > 0 ? (
                           <>
                             <Icon name="PlayCircle" size={20} className="mr-2" />
@@ -346,6 +405,125 @@ export default function Index() {
           </Tabs>
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[85vh]">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              {selectedCourse?.title}
+            </DialogTitle>
+            <DialogDescription className="text-base">
+              {selectedCourse?.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <ScrollArea className="h-[60vh] pr-4">
+            {selectedCourse?.modules ? (
+              <div className="space-y-6">
+                {selectedCourse.modules.map((module, moduleIndex) => (
+                  <div key={module.id} className="animate-fade-in" style={{ animationDelay: `${moduleIndex * 0.1}s` }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold">
+                        {moduleIndex + 1}
+                      </div>
+                      <h3 className="text-xl font-semibold">{module.title}</h3>
+                    </div>
+                    
+                    <div className="space-y-2 ml-13">
+                      {module.lessons.map((lesson) => (
+                        <Card 
+                          key={lesson.id} 
+                          className={`hover:shadow-md transition-all cursor-pointer ${
+                            lesson.completed ? 'bg-muted/50 border-primary/30' : 'hover:border-primary/50'
+                          }`}
+                        >
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3 flex-1">
+                                <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                                  lesson.completed ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                                }`}>
+                                  {lesson.completed ? (
+                                    <Icon name="Check" size={16} />
+                                  ) : (
+                                    <Icon 
+                                      name={lesson.type === 'video' ? 'PlayCircle' : lesson.type === 'quiz' ? 'FileQuestion' : 'FileText'} 
+                                      size={16} 
+                                    />
+                                  )}
+                                </div>
+                                <div className="flex-1">
+                                  <p className={`font-medium ${
+                                    lesson.completed ? 'text-muted-foreground line-through' : ''
+                                  }`}>
+                                    {lesson.title}
+                                  </p>
+                                  <div className="flex items-center gap-4 mt-1">
+                                    <span className="text-sm text-muted-foreground flex items-center gap-1">
+                                      <Icon name="Clock" size={14} />
+                                      {lesson.duration}
+                                    </span>
+                                    <Badge variant="outline" className="text-xs">
+                                      {lesson.type === 'video' ? 'Видео' : lesson.type === 'quiz' ? 'Тест' : 'Текст'}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                              <Button size="sm" variant={lesson.completed ? 'outline' : 'default'}>
+                                {lesson.completed ? 'Повторить' : 'Начать'}
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                    
+                    {moduleIndex < (selectedCourse.modules?.length || 0) - 1 && (
+                      <Separator className="my-6" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <Icon name="BookOpen" size={32} className="text-primary" />
+                      <div>
+                        <h3 className="text-lg font-semibold">Содержание курса</h3>
+                        <p className="text-sm text-muted-foreground">Программа обучения будет доступна после старта</p>
+                      </div>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4 mt-6">
+                      <div className="flex items-center gap-2">
+                        <Icon name="Clock" size={20} className="text-accent" />
+                        <span className="text-sm"><strong>Длительность:</strong> {selectedCourse?.duration}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Icon name="BarChart" size={20} className="text-secondary" />
+                        <span className="text-sm"><strong>Уровень:</strong> {selectedCourse?.level}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Icon name="Users" size={20} className="text-primary" />
+                        <span className="text-sm"><strong>Студентов:</strong> {selectedCourse?.students.toLocaleString()}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Icon name="Star" size={20} className="text-amber-500" />
+                        <span className="text-sm"><strong>Рейтинг:</strong> {selectedCourse?.rating}/5</span>
+                      </div>
+                    </div>
+                    <Button className="w-full mt-6" size="lg">
+                      <Icon name="Rocket" size={20} className="mr-2" />
+                      Записаться на курс
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
